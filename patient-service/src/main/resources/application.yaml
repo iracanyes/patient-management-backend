@@ -1,0 +1,43 @@
+server:
+  port: ${SERVER_PORT:4000}
+  servlet:
+    context-path: ${SERVER_CONTEXT_PATH:/patient-service}
+spring:
+  application:
+    name: patient-service
+  datasource:
+    # In order to use Property Placeholders in the JDBC URL, you need to configure a custom PropertySourcesPlaceholderConfigurer
+    # bean in your configuration class which will allow you to use environment variables in the JDBC URL.
+    url: jdbc:postgresql://localhost:${DB_PORT}/${DB_DATABASE}?currentSchema=${DB_SCHEMA}
+    username: ${DB_USERNAME:pm_admin}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        default_schema: ${DB_SCHEMA}
+    database: postgresql
+    #  PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect'
+    # (remove the property setting and it will be selected by default)
+    #database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  sql:
+    init:
+      mode: always
+      platform: postgres
+      encoding: UTF-8
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+
