@@ -4,6 +4,7 @@ import com.pm.patientservice.dto.PatientResponseDTO;
 import com.pm.patientservice.exception.EmailAlreadyExistsException;
 import com.pm.patientservice.exception.NotFoundApiException;
 import com.pm.patientservice.exception.PatientNotFoundException;
+import com.pm.patientservice.grpc.BillingServiceGrpcClient;
 import com.pm.patientservice.mapper.PatientMapper;
 import com.pm.patientservice.model.Patient;
 import com.pm.patientservice.repository.PatientRepository;
@@ -21,9 +22,14 @@ import java.util.UUID;
 public class PatientService {
   private static final Logger LOGGER = LoggerFactory.getLogger(PatientService.class);
   private final PatientRepository patientRepository;
+  private final BillingServiceGrpcClient billingServiceGrpcClient;
 
-  public PatientService(PatientRepository patientRepository) {
+  public PatientService(
+    PatientRepository patientRepository,
+    BillingServiceGrpcClient billingServiceGrpcClient
+  ) {
     this.patientRepository = patientRepository;
+    this.billingServiceGrpcClient = billingServiceGrpcClient;
     LOGGER.info("PatientService initialized with PatientRepository");
   }
 
@@ -71,6 +77,13 @@ public class PatientService {
     try{
       savedPatient = patientRepository.save(patient);
 
+      // Call the Billing Service via gRPC to create a billing account
+      billingServiceGrpcClient.createBillingAccount(
+        savedPatient.getId().toString(),
+        savedPatient.getFirstname(),
+        savedPatient.getLastname(),
+        savedPatient.getEmail()
+      );
 
       LOGGER.info("Patient created with ID: {}", savedPatient.getId());
       return PatientMapper.toPatientResponseDTO(savedPatient);

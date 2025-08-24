@@ -1,0 +1,30 @@
+syntax= "proto3";
+
+// Will split the BillingServiceProto class into multiple files
+option java_multiple_files = true;
+
+//option java_package = "billing";
+option java_package = "com.pm.billingservice.proto";
+option java_outer_classname = "BillingServiceProto";
+
+//package com.pm.billingservice.grpc;
+
+service BillingService {
+  rpc CreateBillingAccount(CreateBillingAccountRequest) returns (CreateBillingAccountResponse);
+}
+
+message CreateBillingAccountRequest {
+  // The number indicate the deserialization order (MUST be unique)
+  string patientId = 1;
+  string firstname = 2;
+  string lastname = 3;
+  string email = 4;
+
+}
+
+message CreateBillingAccountResponse {
+  string accountId = 1;
+  string status = 2; // e.g., "SUCCESS", "FAILURE"
+  string message = 3; // Additional information or error
+}
+

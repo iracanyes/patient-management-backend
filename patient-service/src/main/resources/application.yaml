@@ -1,3 +1,4 @@
+#debug: true
 server:
   port: ${SERVER_PORT:4000}
   servlet:
@@ -41,3 +42,15 @@ spring:
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
 
+# Swagger UI configuration
+springdoc:
+    swagger-ui:
+      path: /swagger-ui.html
+      display-request-duration: true
+
+# Internal dependencies configuration
+# gRPC server configuration
+billing:
+  service:
+    address: ${BILLING_SERVICE_SERVER_ADDRESS:localhost}
+    port: ${BILLING_SERVICE_PORT:9001}

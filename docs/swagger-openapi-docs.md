@@ -31,5 +31,8 @@ Add the following dependencies to your ``pom.xml`` file:
 
 You can access the OpenAPI documentation at the following URL:
 
-- [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
-- [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+- [http://localhost:8080/context-path/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+- [http://localhost:8080/context-path/v3/api-docs](http://localhost:8080/v3/api-docs)
+
+You must replace `context-path` with the actual context path of your application.
+You also need to ensure that your application is running on port 8080 or adjust the URL accordingly.
