@@ -9,10 +9,10 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.pm</groupId>
-  <artifactId>billing-service</artifactId>
-  <version>2025.08.22-SNAPSHOT</version>
-  <name>billing-service</name>
-  <description>billing-service</description>
+  <artifactId>analytics-service</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>analytics-service</name>
+  <description>analytics-service</description>
   <url/>
   <licenses>
     <license/>
@@ -27,71 +27,38 @@
     <url/>
   </scm>
   <properties>
-    <java.version>21</java.version>
+    <java.version>17</java.version>
+    <spring.kafka.version>4.0.0-M4</spring.kafka.version>
     <grpc.version>1.72.0</grpc.version>
     <protobuf-java.version>4.30.2</protobuf-java.version>
     <protobuf.plugin.version>0.6.1</protobuf.plugin.version>
     <spring-grpc.version>0.10.0</spring-grpc.version>
-    <grpc.services.version>1.75.0</grpc.services.version>
   </properties>
   <dependencies>
-
-    <!-- -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-
-    <!-- ============== Datasource dependencies ================================ -->
-
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!-- ============== gRPC dependencies ================================ -->
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-services</artifactId>
-      <version>${grpc.services.version}</version>
-    </dependency>
-    <!-- gRPC server not starting!!
-    <dependency>
-      <groupId>org.springframework.grpc</groupId>
-      <artifactId>spring-grpc-server-web-spring-boot-starter</artifactId>
-    </dependency>
-    -->
-    <!-- -->
-    <dependency>
-      <groupId>net.devh</groupId>
-      <artifactId>grpc-server-spring-boot-starter</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka</artifactId>
+      <version>${spring.kafka.version}</version>
     </dependency>
 
-    <!-- Java 9+ compatibility - Do NOT update to 2.0.0
-    <dependency>
-      <groupId>jakarta.annotation</groupId>
-      <artifactId>jakarta.annotation-api</artifactId>
-      <optional>true</optional>
-    </dependency>
-    -->
-    <!-- ============== Dev tools ================================ -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
-    </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
-    <!-- ============== Testing dependencies ================================ -->
+
+
+    <!-- ============= Protobuf compiler  =============== -->
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>4.30.2</version>
+    </dependency>
+    <!-- ============= Testing =============== -->
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -99,24 +66,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.springframework.grpc</groupId>
-      <artifactId>spring-grpc-test</artifactId>
+      <groupId>org.springframework.kafka</groupId>
+      <artifactId>spring-kafka-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- -->
-
   </dependencies>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.grpc</groupId>
-        <artifactId>spring-grpc-dependencies</artifactId>
-        <version>${spring-grpc.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+
 
   <build>
     <extensions>
@@ -141,6 +96,19 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <!-- Protobuf plugin to generate Java code from .proto files -->
+      <plugin>
         <groupId>io.github.ascopes</groupId>
         <artifactId>protobuf-maven-plugin</artifactId>
         <version>3.4.2</version>
@@ -163,18 +131,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-            </exclude>
-          </excludes>
-        </configuration>
       </plugin>
     </plugins>
   </build>
