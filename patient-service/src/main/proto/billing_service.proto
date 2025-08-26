@@ -7,7 +7,7 @@ option java_multiple_files = true;
 option java_package = "com.pm.billingservice.proto";
 option java_outer_classname = "BillingServiceProto";
 
-//package com.pm.billingservice.grpc;
+
 
 service BillingService {
   rpc CreateBillingAccount(CreateBillingAccountRequest) returns (CreateBillingAccountResponse);

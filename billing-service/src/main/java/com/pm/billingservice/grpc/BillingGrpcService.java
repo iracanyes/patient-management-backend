@@ -7,7 +7,6 @@ import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.springframework.stereotype.Service;
 
 @GrpcService
 public class BillingGrpcService extends BillingServiceGrpc.BillingServiceImplBase {
