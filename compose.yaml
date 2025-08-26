@@ -29,8 +29,9 @@ services:
     expose:
       # Controller listener port
       - 9091
-      - 9092
       # Docker internal listener port
+      - 9092
+      # Host listener port
       - 29092
     ports:
       # Controller listener port

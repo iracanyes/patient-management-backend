@@ -5,6 +5,7 @@ import com.pm.patientservice.exception.EmailAlreadyExistsException;
 import com.pm.patientservice.exception.NotFoundApiException;
 import com.pm.patientservice.exception.PatientNotFoundException;
 import com.pm.patientservice.grpc.BillingServiceGrpcClient;
+import com.pm.patientservice.kafka.KafkaProducer;
 import com.pm.patientservice.mapper.PatientMapper;
 import com.pm.patientservice.model.Patient;
 import com.pm.patientservice.repository.PatientRepository;
@@ -23,13 +24,16 @@ public class PatientService {
   private static final Logger LOGGER = LoggerFactory.getLogger(PatientService.class);
   private final PatientRepository patientRepository;
   private final BillingServiceGrpcClient billingServiceGrpcClient;
+  private final KafkaProducer kafkaProducer;
 
   public PatientService(
     PatientRepository patientRepository,
-    BillingServiceGrpcClient billingServiceGrpcClient
+    BillingServiceGrpcClient billingServiceGrpcClient,
+    KafkaProducer kafkaProducer
   ) {
     this.patientRepository = patientRepository;
     this.billingServiceGrpcClient = billingServiceGrpcClient;
+    this.kafkaProducer = kafkaProducer;
     LOGGER.info("PatientService initialized with PatientRepository");
   }
 
@@ -85,7 +89,11 @@ public class PatientService {
         savedPatient.getEmail()
       );
 
+      // Produce a Kafka event for the new patient creation
+      kafkaProducer.sendEvent("Patient", "PATIENT_CREATED", savedPatient);
+
       LOGGER.info("Patient created with ID: {}", savedPatient.getId());
+
       return PatientMapper.toPatientResponseDTO(savedPatient);
 
     } catch (Exception e) {
@@ -112,6 +120,9 @@ public class PatientService {
     existingPatient.setBirthDate(patient.getBirthDate());
 
     patientRepository.flush();
+
+    // Produce a Kafka event for the patient update
+    kafkaProducer.sendEvent("Patient", "PATIENT_UPDATED", existingPatient);
 
     updatedPatient = PatientMapper.toPatientResponseDTO(existingPatient);
 

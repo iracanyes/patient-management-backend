@@ -47,3 +47,12 @@ Le flux de travail est le suivant :
 * **Courbe d'apprentissage** : La maîtrise de ses concepts (brokers, partitions, réplication, offsets, etc.) peut prendre du temps pour les nouveaux utilisateurs.
 * **Absence de messages transactionnels** : Il n'y a pas de garantie de l'atomicité sur des transactions complexes impliquant plusieurs topics.
 
+## Kafka: Message format
+
+Kafka acceptes des messages sous différents formats, les plus courants sont :
+* **JSON** : Facile à lire et à écrire, mais peut être verbeux et moins performant pour les gros volumes de données.
+* **Avro** : Format binaire compact avec un schéma, idéal pour les gros volumes de données. Nécessite un registre de schéma.
+* **Protobuf** : Format binaire efficace avec un schéma, développé par Google. Nécessite également un registre de schéma.
+* **String** : Simple chaîne de caractères, utile pour des messages très simples.
+* **Bytes** : Format binaire brut, offre une grande flexibilité mais nécessite une gestion explicite du format des données.
+* **XML** : Format textuel structuré, mais moins courant en raison de sa verbosité et de ses performances inférieures par rapport à JSON ou Avro.
