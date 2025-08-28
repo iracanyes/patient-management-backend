@@ -1,0 +1,50 @@
+
+services:
+  server:
+    container_name: ${SERVER_DOCKER_CONTAINER_NAME}
+    build:
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env.docker
+    networks:
+      - backend
+      - frontend
+    expose:
+      - ${SERVER_PORT}
+    ports:
+      - ${SERVER_LOCAL_PORT}:${SERVER_CONTAINER_PORT}
+  db:
+    container_name: ${DB_DOCKER_CONTAINER_NAME}
+    image: postgres
+    restart: unless-stopped
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - .env.docker
+    networks:
+      - backend
+      - frontend
+    expose:
+      - 5432
+    healthcheck:
+      test: [ "CMD", "pg_isready","-U","$DB_USERNAME","-d","$DB_DATABASE" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - ${DB_PORT}:5432
+volumes:
+  db-data:
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    internal: true

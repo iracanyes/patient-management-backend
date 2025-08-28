@@ -45,7 +45,7 @@ spring:
   kafka:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      # Use ByteArraySerializer for value to send raw bytes with protobuf
+      # Use ByteArraySerializer for value to send raw bytes array using protobuf
       value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
       # Spring connect to Kafka inside Docker cotainer will resolve to 'broker:9092'
       # For local development use 'localhost:29092' with port mapping in docker-compose.yaml

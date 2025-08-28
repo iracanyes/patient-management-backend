@@ -1,5 +1,7 @@
 server:
-  port: 4002
+  port: ${SERVER_PORT:4002}
+  servlet:
+    context-path: ${SERVER_CONTEXT_PATH:/analytics-service}
 spring:
   application:
     name: analytics-service

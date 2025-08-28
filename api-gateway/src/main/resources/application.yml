@@ -1,0 +1,9 @@
+# Application configuration for the API Gateway service
+server:
+  port: ${SERVER_PORT:4004}
+  #servlet:
+  #  context-path: ${SERVER_CONTEXT_PATH:/api}
+spring:
+  application:
+    name: api-gateway
+
