@@ -35,9 +35,11 @@ build/
 
 # Custom
 .env
-**/.env
+**/.env.local
+**/.env.docker
 !.env.dist
-!**/.env.dist
+!**/.env.local.dist
+!**/.env.docker.dist
 # Maven Wrapper
 **/.mvn/wrapper/maven-wrapper.properties
 **/.mvn/wrapper/maven-wrapper.jar

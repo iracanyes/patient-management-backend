@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Custom
+.env.local
+.env.docker
+!.env.docker.dist
+!.env.local.dist

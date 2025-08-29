@@ -47,18 +47,13 @@ public class AppConfig {
     RouteLocatorBuilder builder,
     Environment environment
   ) {
+    String authServiceUrl = environment.getProperty("AUTH_SERVICE_URL");
+    String patientServiceUrl = environment.getProperty("PATIENT_SERVICE_URL");
+    String billingServiceUrl = environment.getProperty("BILLING_SERVICE_URL");
+    String analyticsServiceUrl = environment.getProperty("ANALYTICS_SERVICE_URL");
 
-    String patientServiceUrl = !isRunningInsideDocker()
-      ? environment.getProperty("PATIENT_SERVICE_URL")
-      : environment.getProperty("PATIENT_SERVICE_DOCKER_URL");
 
-    String billingServiceUrl = !isRunningInsideDocker()
-      ? environment.getProperty("BILLING_SERVICE_URL")
-      : environment.getProperty("BILLING_SERVICE_DOCKER_URL");
 
-    String analyticsServiceUrl = !isRunningInsideDocker()
-      ? environment.getProperty("ANALYTICS_SERVICE_URL")
-      : environment.getProperty("ANALYTICS_SERVICE_DOCKER_URL");
 
     LOGGER.info("Configuring routes:");
     LOGGER.info("Patient Service URL: {}", patientServiceUrl);
@@ -66,6 +61,19 @@ public class AppConfig {
     LOGGER.info("Analytics Service URL: {}", analyticsServiceUrl);
 
     return builder.routes()
+      .route("auth-service", r -> r.path("/api/auth/**")
+        .filters(
+          f -> {
+            // Remove the first part of the path "/api" before forwarding the remaining "/patients/**"
+            f.stripPrefix(1);
+            // Rewrite the path to match the patient service endpoint server context path
+            f.rewritePath("//?(?<segment>.*)", "/${segment}");
+
+            return f;
+          }
+        )
+        .uri(authServiceUrl)
+      )
       .route("patient-service", r -> r.path("/api/patients/**")
         .filters(
           f -> {

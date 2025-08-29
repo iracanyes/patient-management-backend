@@ -13,7 +13,7 @@ services:
     build:
       context: .
     env_file:
-      - .env
+      - .env.local
     ports:
       - "${SERVER_LOCAL_PORT:-4004}:${SERVER_CONTAINER_PORT:-4004}"
 
