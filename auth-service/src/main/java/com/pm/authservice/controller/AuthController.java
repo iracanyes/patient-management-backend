@@ -10,10 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -39,5 +36,23 @@ public class AuthController {
 
     LoginResponseDTO loginResponseDTO = tokens.get();
     return ResponseEntity.ok(loginResponseDTO);
+  }
+
+  @GetMapping("/validate")
+  public ResponseEntity validateToken(@RequestHeader("Authorization") String authHeader) {
+    // Check if header exists
+    if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    // Extract the token from Authorization header
+    // Authorization: Bearer <token>
+    String token = authHeader.substring(7);
+
+    return authService.validateToken(token)
+      ? ResponseEntity.ok().build()
+      : ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body(new ApiException(HttpStatus.UNAUTHORIZED.value(), "Unauthorized operation!"));
+
   }
 }

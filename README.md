@@ -24,3 +24,13 @@ Java, Spring Boot & Docker based Patient Management System with REST APIs and GR
 
 ## Documentation:
 - [Build & Deploy a production-ready Patient Management System with microservices](https://www.youtube.com/watch?v=tseqdcFfTUY)
+
+## Microservices:
+
+| Microservices     | Port  |
+-----------------------------
+| Patient Service   | 4000 |
+| Billing Service   | 4001 |
+| Analytics Service | 4002 |
+| API Gateway       | 4003 |
+| Auth Service      | 4004 |

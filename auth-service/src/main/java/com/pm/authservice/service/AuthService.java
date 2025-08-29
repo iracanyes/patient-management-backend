@@ -35,11 +35,16 @@ public class AuthService {
       .filter(u -> passwordEncoder.matches(loginRequestDTO.getPassword(), u.getPassword()))   // Check password
       .map(u -> jwtUtil.generateTokens(u.getEmail(), u.getRole()));   // Generate tokens
 
-
-    if(optionalResponse.isEmpty()){
-      throw new UsernameNotFoundException("Username not found");
-    }
-
     return optionalResponse;
+  }
+
+  public boolean validateToken(String token) {
+    try{
+      jwtUtil.validateToken(token);
+      return true;
+    } catch (Exception e) {
+      LOGGER.error("", e.getMessage());
+      return false;
+    }
   }
 }

@@ -28,12 +28,13 @@ public class AppConfig {
   public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
     PropertySourcesPlaceholderConfigurer configurer =  new PropertySourcesPlaceholderConfigurer();
 
+    /*
     configurer.setLocation( new FileSystemResource(
       isRunningInsideDocker()
         ? ".env.docker"
         : ".env.local"
     ));
-
+    */
     return configurer;
   }
 }
