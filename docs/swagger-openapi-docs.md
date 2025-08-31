@@ -2,7 +2,7 @@
 
 # Swagger : Installation
 
-Add the following dependencies to your ``pom.xml`` file:
+Add the following dependencies to the ``pom.xml`` file of the desired service:
 ```xml
     <!--
     Here we exclude the commons-lang3 dependency from springdoc-openapi-starter-webmvc-ui
@@ -26,6 +26,21 @@ Add the following dependencies to your ``pom.xml`` file:
       <version>3.18.0</version>
     </dependency>
 ````
+ Next, add the configuration for OpenAPI documentation
+to your application configuration file ``application.[properties/yaml]``
+
+````yaml
+# Swagger UI configuration
+springdoc:
+    api-docs:
+      enabled: true
+      path: /v3/api-docs
+    swagger-ui:
+      enabled: true
+      path: /swagger-ui.html
+      display-request-duration: true
+````
+
 
 ## Swagger : OpenAPI documentation
 
