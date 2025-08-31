@@ -1,8 +1,10 @@
 package com.pm.apigateway.config;
 
+import com.pm.apigateway.filter.JwtValidationGatewayFilterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.gateway.handler.predicate.BeforeRoutePredicateFactory;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -42,9 +44,16 @@ public class AppConfig {
     return configurer;
   }
 
+  /**
+   * Programmatic configuration of API gateway routes
+   *
+   * TODO: Implement JwtValidation and API docs UI
+   */
+  /*
   @Bean
   public RouteLocator customRouteLocator(
     RouteLocatorBuilder builder,
+    JwtValidationGatewayFilterFactory jwtValidationFilterFactory,
     Environment environment
   ) {
     String authServiceUrl = environment.getProperty("AUTH_SERVICE_URL");
@@ -64,6 +73,7 @@ public class AppConfig {
       .route("auth-service", r -> r.path("/api/auth/**")
         .filters(
           f -> {
+    
             // Remove the first part of the path "/api" before forwarding the remaining "/patients/**"
             f.stripPrefix(1);
             // Rewrite the path to match the patient service endpoint server context path
@@ -77,10 +87,15 @@ public class AppConfig {
       .route("patient-service", r -> r.path("/api/patients/**")
         .filters(
           f -> {
+            // Authorization filter
+            // f.filter(jwtValidationFilterFactory.apply(new BeforeRoutePredicateFactory.Config()));
+
             // Remove the first part of the path "/api" before forwarding the remaining "/patients/**"
             f.stripPrefix(1);
             // Rewrite the path to match the patient service endpoint server context path
             f.rewritePath("//?(?<segment>.*)", "/patient-service/${segment}");
+
+
 
             return f;
           }
@@ -134,4 +149,6 @@ public class AppConfig {
       )
       .build();
   }
+
+   */
 }

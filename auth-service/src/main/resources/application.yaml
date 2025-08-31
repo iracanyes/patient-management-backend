@@ -45,3 +45,4 @@ jwt:
   expiration:
     token: ${JWT_TOKEN_EXPIRATION}
     refresh_token: ${JWT_REFRESH_TOKEN_EXPIRATION}
+

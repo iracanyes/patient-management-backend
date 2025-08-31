@@ -43,7 +43,7 @@ public class AuthService {
       jwtUtil.validateToken(token);
       return true;
     } catch (Exception e) {
-      LOGGER.error("", e.getMessage());
+      LOGGER.error("Error while ", e.getMessage());
       return false;
     }
   }

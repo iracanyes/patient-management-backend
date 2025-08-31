@@ -52,9 +52,15 @@ spring:
       bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:'localhost:29092'}
 # Swagger UI configuration
 springdoc:
+    api-docs:
+      enabled: true
+      path: /v3/api-docs
     swagger-ui:
+      enabled: true
       path: /swagger-ui.html
       display-request-duration: true
+
+
 
 # Internal dependencies configuration
 # gRPC server configuration
