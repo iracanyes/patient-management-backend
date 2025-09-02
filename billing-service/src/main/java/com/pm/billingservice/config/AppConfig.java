@@ -12,7 +12,7 @@ public class AppConfig {
     PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
 
     // Additional .env properties
-    configurer.setLocation(new FileSystemResource("billing-service/.env"));
+    //configurer.setLocation(new FileSystemResource("billing-service/.env"));
 
     return configurer;
   }

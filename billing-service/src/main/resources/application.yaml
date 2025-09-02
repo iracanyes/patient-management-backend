@@ -1,6 +1,7 @@
 grpc:
   server:
     port: ${GRPC_SERVER_PORT:9001}
+    address: ${GRPC_SERVER_ADDRESS}
 
 server:
   servlet:
@@ -9,35 +10,35 @@ server:
 spring:
   application:
     name: billing-service
-  datasource:
-    # In order to use Property Placeholders in the JDBC URL, you need to configure a custom PropertySourcesPlaceholderConfigurer
-    # bean in your configuration class which will allow you to use environment variables in the JDBC URL.
-    url: jdbc:postgresql://localhost:${DB_PORT}/${DB_DATABASE}?currentSchema=${DB_SCHEMA}
-    username: ${DB_USERNAME:pm_admin}
-    password: ${DB_PASSWORD}
-    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
-  grpc:
-    server:
-      port: ${GRPC_SERVER_PORT:9002}
-      servlet:
-        enabled: true
-      max-inbound-message-size: 10485760 # 10 MB
-      max-inbound-stream-count: 1000
-  jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: none
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
-        default_schema: ${DB_SCHEMA}
-    database: postgresql
-  sql:
-    init:
-      mode: always
-      platform: postgres
-      encoding: UTF-8
+#  datasource:
+#    # In order to use Property Placeholders in the JDBC URL, you need to configure a custom PropertySourcesPlaceholderConfigurer
+#    # bean in your configuration class which will allow you to use environment variables in the JDBC URL.
+#    url: jdbc:postgresql://localhost:${DB_PORT}/${DB_DATABASE}?currentSchema=${DB_SCHEMA}
+#    username: ${DB_USERNAME:pm_admin}
+#    password: ${DB_PASSWORD}
+#    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
+#  grpc:
+#    server:
+#      port: ${GRPC_SERVER_PORT:9001}
+#      servlet:
+#        enabled: true
+#      max-inbound-message-size: 10485760 # 10 MB
+#      max-inbound-stream-count: 1000
+#  jpa:
+#    generate-ddl: true
+#    hibernate:
+#      ddl-auto: none
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        use_sql_comments: true
+#        default_schema: ${DB_SCHEMA}
+#    database: postgresql
+#  sql:
+#    init:
+#      mode: always
+#      platform: postgres
+#      encoding: UTF-8
       #schema-locations: classpath:schema.sql
       #data-locations: classpath:data.sql

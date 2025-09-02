@@ -52,12 +52,13 @@ First add the dependency to ``pom.xml``
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <version>${junit.jupiter.version}</version>
+      <scope>compile</scope> <!-- For Intellij iDEA : scope must be compile in order to run test in the application -->
     </dependency>
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <version>${rest.assured.version}</version>
-      <scope>test</scope>
+      <scope>compile</scope> 
     </dependency>
   </dependencies>
 ````

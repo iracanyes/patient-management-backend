@@ -1,0 +1,68 @@
+# Application configuration for the API Gateway service
+# Will be use automatically by Spring with the active Spring profile "prod" for localstack
+# to prevent issue with service discovery and use host.docker.internal
+server:
+  port: ${SERVER_PORT:4004}
+  #servlet:
+  #  context-path: ${SERVER_CONTEXT_PATH:/api}
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          # We should note in any production-ready application,
+          # the Spring Cloud Gateway should route to the load balancer URL of the backend service.
+          routes:
+            - id: auth-service-route
+              uri: ${AUTH_SERVICE_URL}
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                # Note that the $ should be replaced with $\ because of the YAML specification.
+                - RewritePath=/api/?(?<segment>.*), /$\{segment}
+            - id: patient-service-route
+              uri: ${PATIENT_SERVICE_URL}
+              predicates:
+                - Path=/api/patients/**
+              filters:
+                # Note that the $ should be replaced with $\ because of the YAML specification.
+                - RewritePath=/api/?(?<segment>.*), /patient-service/$\{segment}
+                - JwtValidation
+            - id: patient-service-docs-route
+              uri: ${PATIENT_SERVICE_URL}
+              predicates:
+                - Path=/api-docs/patients
+              filters:
+                # Note that the $ should be replaced with $\ because of the YAML specification.
+                - RewritePath=/api-docs/patients, /patient-service/v3/api-docs
+                - JwtValidation
+            - id: billing-service-route
+              uri: ${PATIENT_SERVICE_URL}
+              predicates:
+                - Path=/api/billings/**
+              filters:
+                - StripPrefix=1
+                # Note that the $ should be replaced with $\ because of the YAML specification.
+                - RewritePath=/?(?<segment>.*), /billing-service/$\{segment}
+                #- JwtValidation
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - name: gateway-service
+        url: /v3/api-docs
+      - name: patient-service
+        # Here we provide the resource's path on the API gateway (defined in routes)
+        # Swagger UI Client (on the api-gateway service) will request the OpenAPI documentation
+        # for patient-service microservice on this route to the api-gateway microservice
+        url: /api-docs/patients
+service:
+  auth:
+    url: ${AUTH_SERVICE_URL}
+

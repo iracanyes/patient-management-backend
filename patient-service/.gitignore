@@ -33,5 +33,5 @@ build/
 .vscode/
 
 # Custom
-.env
+.env.local
 !.env.dist
